@@ -20,6 +20,12 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Show root folder contents (debug)
+      run: ls -al
+
+    - name: Show current directory structure recursively (debug)
+      run: find . -type f
+
     - name: Build and Push Docker image
       uses: docker/build-push-action@v5
       with:
