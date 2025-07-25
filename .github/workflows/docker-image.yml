@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wan2gp-video-generator
+spec:
+  restartPolicy: OnFailure
+  containers:
+  - name: wan2gp
+    image: <your-docker-hub-user>/wan2gp:latest
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+    volumeMounts:
+    - name: inputs
+      mountPath: /input
+    - name: outputs
+      mountPath: /output
+    args:
+    - "--i2v"
+    - "--model"
+    - "wan2.1"
+    - "--control"
+    - "vace"
+    - "--quantize"
+    - "q4_K_M"
+    - "--teacache"
+    - "--frames"
+    - "150"
+    - "--audio"
+    - "/input/audio.wav"
+    - "--init-image"
+    - "/input/start.png"
+    - "--output"
+    - "/output/video.mp4"
+  volumes:
+  - name: inputs
+    hostPath:
+      path: /data/inputs
+  - name: outputs
+    hostPath:
+      path: /data/outputs
