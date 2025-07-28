@@ -1,6 +1,6 @@
 FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04
 
-# Install Python and essential dependencies (including OpenCV dependencies)
+# Install Python and dependencies (including OpenCV requirements)
 RUN apt-get update && apt-get install -y \
     python3-pip git \
     libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev \
@@ -17,8 +17,8 @@ RUN pip install -r requirements.txt
 # Expose necessary port
 EXPOSE 7860
 
-# Run prefetch to download model at build (optional but recommended)
-RUN python3 wgp.py --i2v-1-3B --frames 1 --steps 1 --guidance 1 || true
+# Prefetch smaller model (optional but recommended for caching)
+RUN python3 wgp.py --i2v-1-3B --frames 1 --steps 1 || true
 
-# Start the application clearly logging output
-CMD ["bash", "-c", "python3 wgp.py --i2v-14B --frames 49 --steps 20 --guidance 7 --host 0.0.0.0"]
+# Corrected CMD
+CMD ["bash", "-c", "python3 wgp.py --i2v-14B --frames 49 --steps 20 --server-name 0.0.0.0"]
